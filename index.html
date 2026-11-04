@@ -1,67 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Produção</title>
 
-<title>Controle de Produção</title>
-
-<link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="app.js"></script>
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-    <h1>CONTROLE DE PRODUÇÃO</h1>
-    <div id="usuarioAtual"></div>
-</header>
+    <header>
+        <h1>CONTROLE DE PRODUÇÃO</h1>
+        <div id="usuarioAtual">Carregando...</div>
+    </header>
 
-<div class="container">
+    <div class="container">
 
-    <input
-        type="text"
-        id="codigo"
-        placeholder="Bipe ou digite o código">
+        <input
+            type="text"
+            id="codigo"
+            placeholder="Bipe ou digite o código"
+            autocomplete="off">
 
-    <div class="acoes">
-        <button onclick="registrar()">Registrar</button>
-        <button onclick="trocarUsuario()">Trocar Usuário</button>
-        <button onclick="exportarCSV()">Exportar CSV</button>
+        <div class="acoes">
+            <button onclick="registrar()">
+                Registrar
+            </button>
+
+            <button onclick="trocarUsuario()">
+                Trocar Usuário
+            </button>
+
+            <button onclick="exportarCSV()">
+                Exportar CSV
+            </button>
+        </div>
+
+        <input
+            type="text"
+            id="pesquisa"
+            placeholder="Pesquisar código, tipo ou usuário..."
+            onkeyup="filtrar()">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Tipo</th>
+                    <th>Usuário</th>
+                    <th>Data/Hora</th>
+                </tr>
+            </thead>
+
+            <tbody id="tabela">
+            </tbody>
+        </table>
+
     </div>
 
-    <input
-        type="text"
-        id="pesquisa"
-        placeholder="Pesquisar..."
-        onkeyup="filtrar()">
+    <footer>
+        BY: ERIC SANTOS
+    </footer>
 
-    <table>
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Tipo</th>
-                <th>Usuário</th>
-                <th>Data/Hora</th>
-            </tr>
-        </thead>
+    <!-- Configuração do Supabase -->
+    <script src="supabase.js"></script>
 
-        <tbody id="tabela"></tbody>
-
-    </table>
-
-</div>
-
-<footer>
-    BY: ERIC SANTOS
-</footer>
-
-<script src="app.js"></script>
+    <!-- Sistema -->
+    <script src="app.js"></script>
 
 </body>
+
 </html>
