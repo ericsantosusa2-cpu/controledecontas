@@ -1,0 +1,94 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    padding:20px;
+}
+
+header{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+header h1{
+    color:#2563eb;
+}
+
+#usuarioAtual{
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.container{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 15px rgba(0,0,0,.08);
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.acoes{
+    margin-bottom:10px;
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    margin-right:5px;
+    margin-bottom:5px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#2563eb;
+    color:white;
+    padding:10px;
+}
+
+td{
+    border-bottom:1px solid #ddd;
+    padding:10px;
+}
+
+footer{
+    position:fixed;
+    right:10px;
+    bottom:10px;
+    font-weight:bold;
+    color:#555;
+}
+
+@media(max-width:768px){
+
+    table{
+        font-size:12px;
+    }
+
+    button{
+        width:100%;
+    }
+}
