@@ -1,8 +1,8 @@
 const SUPABASE_URL =
-"https://SEU-PROJETO.supabase.co";
+"https://lwapucgvumvdzgrarfew.supabase.co/rest/v1/";
 
 const SUPABASE_ANON_KEY =
-"SUA_CHAVE_PUBLICA";
+"sb_publishable_hlgII0SbBrwOdM9K8b78zw_kE_OoDfM";
 
 const supabaseClient =
 supabase.createClient(
