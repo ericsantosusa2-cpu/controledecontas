@@ -1,113 +1,124 @@
-let usuario =
-localStorage.getItem("usuario");
+let usuario = localStorage.getItem("usuario");
 
-if(!usuario){
+if (!usuario) {
+    usuario = prompt("Digite seu nome:");
 
-    usuario = prompt(
-        "Digite seu nome:"
-    );
-
-    if(!usuario){
+    if (!usuario || usuario.trim() === "") {
         usuario = "Usuário";
     }
 
-    localStorage.setItem(
-        "usuario",
-        usuario
-    );
+    localStorage.setItem("usuario", usuario);
 }
 
-document.getElementById(
-    "usuarioAtual"
-).innerHTML =
+document.getElementById("usuarioAtual").innerHTML =
     "Usuário Atual: " + usuario;
 
 let todosRegistros = [];
 
-async function registrar(){
+async function registrar() {
 
-    const codigo =
-    document.getElementById("codigo")
-    .value
-    .trim();
+    try {
 
-    if(
-        codigo.length !== 6 &&
-        codigo.length !== 7
-    ){
-        alert("Código inválido");
-        return;
-    }
+        const codigo =
+            document.getElementById("codigo")
+                .value
+                .trim();
 
-    const tipo =
-    codigo.length === 7
-    ? "CONTA"
-    : "PROTOCOLO";
-
-    const { data: existe } =
-    await supabaseClient
-    .from("registros")
-    .select("codigo")
-    .eq("codigo", codigo);
-
-    if(existe && existe.length > 0){
-
-        alert("Código já registrado");
-        return;
-    }
-
-    const { error } =
-    await supabaseClient
-    .from("registros")
-    .insert([
-        {
-            codigo,
-            tipo,
-            usuario
+        if (
+            codigo.length !== 6 &&
+            codigo.length !== 7
+        ) {
+            alert("Código inválido");
+            return;
         }
-    ]);
 
-    if(error){
+        const tipo =
+            codigo.length === 7
+                ? "CONTA"
+                : "PROTOCOLO";
 
-        alert(error.message);
-        return;
+        const { data: existe, error: erroConsulta } =
+            await supabaseClient
+                .from("registros")
+                .select("codigo")
+                .eq("codigo", codigo);
+
+        if (erroConsulta) {
+            console.error(erroConsulta);
+            alert("Erro ao verificar duplicidade.");
+            return;
+        }
+
+        if (existe && existe.length > 0) {
+
+            alert("Código já registrado");
+
+            return;
+        }
+
+        const { error } =
+            await supabaseClient
+                .from("registros")
+                .insert([
+                    {
+                        codigo: codigo,
+                        tipo: tipo,
+                        usuario: usuario
+                    }
+                ]);
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "Erro ao gravar:\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+        document.getElementById("codigo").value = "";
+
+        carregar();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        alert("Erro inesperado.");
     }
-
-    document.getElementById(
-        "codigo"
-    ).value = "";
-
-    carregar();
 }
 
-async function carregar(){
+async function carregar() {
 
     const { data, error } =
-    await supabaseClient
-    .from("registros")
-    .select("*")
-    .order(
-        "id",
-        {
-            ascending:false
-        }
-    );
+        await supabaseClient
+            .from("registros")
+            .select("*")
+            .order(
+                "id",
+                { ascending: false }
+            );
 
-    if(error){
+    if (error) {
+
         console.error(error);
+
         return;
     }
 
-    todosRegistros = data;
+    todosRegistros = data || [];
 
-    render(data);
+    render(todosRegistros);
 }
 
-function render(lista){
+function render(lista) {
 
     let html = "";
 
-    lista.forEach(item=>{
+    lista.forEach(item => {
 
         html += `
         <tr>
@@ -117,95 +128,98 @@ function render(lista){
             <td>${new Date(item.data_hora).toLocaleString("pt-BR")}</td>
         </tr>
         `;
+
     });
 
-    document
-    .getElementById("tabela")
-    .innerHTML = html;
+    document.getElementById("tabela").innerHTML = html;
 }
 
-function filtrar(){
+function filtrar() {
 
     const texto =
-    document
-    .getElementById("pesquisa")
-    .value
-    .toLowerCase();
+        document
+            .getElementById("pesquisa")
+            .value
+            .toLowerCase();
 
     const filtrados =
-    todosRegistros.filter(r=>
+        todosRegistros.filter(item =>
 
-        r.codigo.toLowerCase().includes(texto) ||
-        r.tipo.toLowerCase().includes(texto) ||
-        r.usuario.toLowerCase().includes(texto)
+            item.codigo.toLowerCase().includes(texto) ||
+            item.tipo.toLowerCase().includes(texto) ||
+            item.usuario.toLowerCase().includes(texto)
 
-    );
+        );
 
     render(filtrados);
 }
 
-function trocarUsuario(){
+function trocarUsuario() {
 
-    localStorage.removeItem(
-        "usuario"
-    );
+    localStorage.removeItem("usuario");
 
     location.reload();
 }
 
-function exportarCSV(){
+function exportarCSV() {
 
     let csv =
-    "Codigo,Tipo,Usuario,DataHora\n";
+        "Codigo,Tipo,Usuario,DataHora\n";
 
-    todosRegistros.forEach(r=>{
+    todosRegistros.forEach(item => {
 
-        csv += `${r.codigo},${r.tipo},${r.usuario},${r.data_hora}\n`;
+        csv +=
+            `${item.codigo},${item.tipo},${item.usuario},${item.data_hora}\n`;
 
     });
 
     const blob =
-    new Blob(
-        [csv],
-        {type:"text/csv"}
-    );
+        new Blob(
+            [csv],
+            {
+                type: "text/csv;charset=utf-8;"
+            }
+        );
 
-    const a =
-    document.createElement("a");
+    const link =
+        document.createElement("a");
 
-    a.href =
-    URL.createObjectURL(blob);
+    link.href =
+        URL.createObjectURL(blob);
 
-    a.download =
-    "controle_producao.csv";
+    link.download =
+        "controle_producao.csv";
 
-    a.click();
+    link.click();
 }
 
 document
-.getElementById("codigo")
-.addEventListener(
-    "keypress",
-    e=>{
-        if(e.key==="Enter"){
-            registrar();
-        }
-    }
-);
+    .getElementById("codigo")
+    .addEventListener(
+        "keypress",
+        function (e) {
 
-supabaseClient
-.channel("registros")
-.on(
-    "postgres_changes",
-    {
-        event:"*",
-        schema:"public",
-        table:"registros"
-    },
-    ()=>{
-        carregar();
-    }
-)
-.subscribe();
+            if (e.key === "Enter") {
+
+                registrar();
+            }
+        }
+    );
 
 carregar();
+
+supabaseClient
+    .channel("registros")
+    .on(
+        "postgres_changes",
+        {
+            event: "*",
+            schema: "public",
+            table: "registros"
+        },
+        () => {
+
+            carregar();
+        }
+    )
+    .subscribe();
