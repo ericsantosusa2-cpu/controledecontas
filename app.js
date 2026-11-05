@@ -93,22 +93,6 @@ async function registrar() {
 
 async function carregar() {
 
-    const contas =
-data.filter(x=>x.tipo==="CONTA").length;
-
-const protocolos =
-data.filter(x=>x.tipo==="PROTOCOLO").length;
-
-document.getElementById("contas").innerText =
-contas;
-
-document.getElementById("protocolos").innerText =
-protocolos;
-
-document.getElementById("total").innerText =
-data.length;
-
-    
     const { data, error } =
         await supabaseClient
             .from("registros")
@@ -128,8 +112,26 @@ data.length;
     todosRegistros = data || [];
 
     render(todosRegistros);
-}
 
+    const contas =
+        todosRegistros.filter(
+            x => x.tipo === "CONTA"
+        ).length;
+
+    const protocolos =
+        todosRegistros.filter(
+            x => x.tipo === "PROTOCOLO"
+        ).length;
+
+    document.getElementById("contas").innerText =
+        contas;
+
+    document.getElementById("protocolos").innerText =
+        protocolos;
+
+    document.getElementById("total").innerText =
+        todosRegistros.length;
+}
 function render(lista) {
 
     let html = "";
