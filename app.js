@@ -224,40 +224,39 @@ function render(lista) {
 
 function filtrar() {
 
-    const texto =
+    const dataFiltro =
         document
-            .getElementById("pesquisa")
-            .value
-            .toLowerCase();
+        .getElementById("filtroData")
+        .value;
+
+    if (!dataFiltro) {
+
+        render(todosRegistros);
+
+        return;
+    }
 
     const filtrados =
-        todosRegistros.filter(item =>
+        todosRegistros.filter(item => {
 
-            String(item.codigo)
-                .toLowerCase()
-                .includes(texto)
+            const dataRegistro =
+                new Date(item.data_hora)
+                .toISOString()
+                .split("T")[0];
 
-            ||
-
-            String(item.tipo)
-                .toLowerCase()
-                .includes(texto)
-
-            ||
-
-            String(item.usuario)
-                .toLowerCase()
-                .includes(texto)
-
-            ||
-
-            String(item.etapa || "")
-                .toLowerCase()
-                .includes(texto)
-
-        );
+            return dataRegistro === dataFiltro;
+        });
 
     render(filtrados);
+}
+
+function limparFiltroData() {
+
+    document
+    .getElementById("filtroData")
+    .value = "";
+
+    render(todosRegistros);
 }
 
 /* ===========================
