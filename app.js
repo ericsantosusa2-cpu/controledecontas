@@ -93,6 +93,22 @@ async function registrar() {
 
 async function carregar() {
 
+    const contas =
+data.filter(x=>x.tipo==="CONTA").length;
+
+const protocolos =
+data.filter(x=>x.tipo==="PROTOCOLO").length;
+
+document.getElementById("contas").innerText =
+contas;
+
+document.getElementById("protocolos").innerText =
+protocolos;
+
+document.getElementById("total").innerText =
+data.length;
+
+    
     const { data, error } =
         await supabaseClient
             .from("registros")
@@ -123,7 +139,11 @@ function render(lista) {
         html += `
         <tr>
             <td>${item.codigo}</td>
-            <td>${item.tipo}</td>
+            <td>
+${item.tipo === "CONTA"
+? '<span class="badge-conta">CONTA</span>'
+: '<span class="badge-protocolo">PROTOCOLO</span>'}
+</td>
             <td>${item.usuario}</td>
             <td>${new Date(item.data_hora).toLocaleString("pt-BR")}</td>
         </tr>
