@@ -224,27 +224,59 @@ function render(lista) {
 
 function filtrar() {
 
+    const texto =
+        document
+        .getElementById("pesquisa")
+        .value
+        .toLowerCase();
+
     const dataFiltro =
         document
         .getElementById("filtroData")
         .value;
 
-    if (!dataFiltro) {
-
-        render(todosRegistros);
-
-        return;
-    }
-
     const filtrados =
         todosRegistros.filter(item => {
 
-            const dataRegistro =
-                new Date(item.data_hora)
-                .toISOString()
-                .split("T")[0];
+            const pesquisaOk =
 
-            return dataRegistro === dataFiltro;
+                String(item.codigo)
+                .toLowerCase()
+                .includes(texto)
+
+                ||
+
+                String(item.usuario)
+                .toLowerCase()
+                .includes(texto)
+
+                ||
+
+                String(item.tipo)
+                .toLowerCase()
+                .includes(texto)
+
+                ||
+
+                String(item.etapa || "")
+                .toLowerCase()
+                .includes(texto);
+
+            let dataOk = true;
+
+            if(dataFiltro){
+
+                const dataRegistro =
+                    new Date(item.data_hora)
+                    .toISOString()
+                    .split("T")[0];
+
+                dataOk =
+                    dataRegistro === dataFiltro;
+            }
+
+            return pesquisaOk && dataOk;
+
         });
 
     render(filtrados);
