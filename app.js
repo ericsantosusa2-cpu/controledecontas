@@ -36,12 +36,16 @@ async function registrar() {
             codigo.length === 7
                 ? "CONTA"
                 : "PROTOCOLO";
+        const etapa =
+        document.getElementById("etapa")
+        .value;
 
-        const { data: existe, error: erroConsulta } =
-            await supabaseClient
-                .from("registros")
-                .select("codigo")
-                .eq("codigo", codigo);
+        const { data: existe } =
+await supabaseClient
+.from("registros")
+.select("*")
+.eq("codigo", codigo)
+.eq("etapa", etapa);
 
         if (erroConsulta) {
             console.error(erroConsulta);
@@ -61,10 +65,11 @@ async function registrar() {
                 .from("registros")
                 .insert([
                     {
-                        codigo: codigo,
-                        tipo: tipo,
-                        usuario: usuario
-                    }
+                 codigo: codigo,
+                 tipo: tipo,
+                 etapa: etapa,
+                 usuario: usuario
+         }
                 ]);
 
         if (error) {
@@ -145,9 +150,19 @@ function render(lista) {
 ${item.tipo === "CONTA"
 ? '<span class="badge-conta">CONTA</span>'
 : '<span class="badge-protocolo">PROTOCOLO</span>'}
+<td>
+${item.etapa}
 </td>
-            <td>${item.usuario}</td>
-            <td>${new Date(item.data_hora).toLocaleString("pt-BR")}</td>
+
+<td>
+${item.usuario}
+</td>
+
+<td>
+${new Date(item.data_hora)
+.toLocaleString("pt-BR")}
+</td>
+
         </tr>
         `;
 
