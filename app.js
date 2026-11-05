@@ -20,57 +20,75 @@ async function registrar() {
     try {
 
         const codigo =
-            document.getElementById("codigo")
-                .value
-                .trim();
+            document
+            .getElementById("codigo")
+            .value
+            .trim();
+
+        const etapa =
+            document
+            .getElementById("etapa")
+            .value;
 
         if (
             codigo.length !== 6 &&
             codigo.length !== 7
         ) {
+
             alert("Código inválido");
+
             return;
         }
 
         const tipo =
             codigo.length === 7
-                ? "CONTA"
-                : "PROTOCOLO";
-        const etapa =
-        document.getElementById("etapa")
-        .value;
+            ? "CONTA"
+            : "PROTOCOLO";
 
-        const { data: existe } =
-await supabaseClient
-.from("registros")
-.select("*")
-.eq("codigo", codigo)
-.eq("etapa", etapa);
+        const {
+            data: existe,
+            error: erroConsulta
+        } =
+        await supabaseClient
+            .from("registros")
+            .select("*")
+            .eq("codigo", codigo)
+            .eq("etapa", etapa);
 
         if (erroConsulta) {
+
             console.error(erroConsulta);
-            alert("Erro ao verificar duplicidade.");
+
+            alert(
+                "Erro ao verificar duplicidade."
+            );
+
             return;
         }
 
-        if (existe && existe.length > 0) {
+        if (
+            existe &&
+            existe.length > 0
+        ) {
 
-            alert("Código já registrado");
+            alert(
+                `Esta conta já foi registrada em ${etapa}`
+            );
 
             return;
         }
 
         const { error } =
             await supabaseClient
-                .from("registros")
-                .insert([
-                    {
-                 codigo: codigo,
-                 tipo: tipo,
-                 etapa: etapa,
-                 usuario: usuario
-         }
-                ]);
+            .from("registros")
+            .insert([
+                {
+                    codigo: codigo,
+                    tipo: tipo,
+                    etapa: etapa,
+                    usuario: usuario
+                }
+            ]);
 
         if (error) {
 
@@ -84,18 +102,23 @@ await supabaseClient
             return;
         }
 
-        document.getElementById("codigo").value = "";
+        document
+            .getElementById("codigo")
+            .value = "";
 
         carregar();
 
-    } catch (erro) {
+    }
+    catch (erro) {
 
         console.error(erro);
 
-        alert("Erro inesperado.");
+        alert(
+            "Erro inesperado:\n\n" +
+            erro.message
+        );
     }
 }
-
 async function carregar() {
 
     const { data, error } =
