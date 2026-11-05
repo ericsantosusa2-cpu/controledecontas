@@ -1,6 +1,7 @@
 let usuario = localStorage.getItem("usuario");
 
 if (!usuario) {
+
     usuario = prompt("Digite seu nome:");
 
     if (!usuario || usuario.trim() === "") {
@@ -14,6 +15,10 @@ document.getElementById("usuarioAtual").innerHTML =
     "Usuário Atual: " + usuario;
 
 let todosRegistros = [];
+
+/* ===========================
+   REGISTRAR
+=========================== */
 
 async function registrar() {
 
@@ -42,8 +47,8 @@ async function registrar() {
 
         const tipo =
             codigo.length === 7
-            ? "CONTA"
-            : "PROTOCOLO";
+                ? "CONTA"
+                : "PROTOCOLO";
 
         const {
             data: existe,
@@ -83,10 +88,10 @@ async function registrar() {
             .from("registros")
             .insert([
                 {
-                    codigo: codigo,
-                    tipo: tipo,
-                    etapa: etapa,
-                    usuario: usuario
+                    codigo,
+                    tipo,
+                    etapa,
+                    usuario
                 }
             ]);
 
@@ -102,9 +107,9 @@ async function registrar() {
             return;
         }
 
-        document
-            .getElementById("codigo")
-            .value = "";
+        document.getElementById(
+            "codigo"
+        ).value = "";
 
         carregar();
 
@@ -119,6 +124,11 @@ async function registrar() {
         );
     }
 }
+
+/* ===========================
+   CARREGAR
+=========================== */
+
 async function carregar() {
 
     const { data, error } =
@@ -128,11 +138,11 @@ async function carregar() {
             .order(
                 "id",
                 {
-                    ascending:false
+                    ascending: false
                 }
             );
 
-    if(error){
+    if (error) {
 
         console.error(error);
 
@@ -153,15 +163,20 @@ async function carregar() {
             x => x.etapa === "POS"
         ).length;
 
-    document.getElementById("pre")
-    .innerText = pre;
+    document.getElementById("pre").innerText =
+        pre;
 
-    document.getElementById("pos")
-    .innerText = pos;
+    document.getElementById("pos").innerText =
+        pos;
 
-    document.getElementById("total")
-    .innerText = todosRegistros.length;
+    document.getElementById("total").innerText =
+        todosRegistros.length;
 }
+
+/* ===========================
+   RENDER
+=========================== */
+
 function render(lista) {
 
     let html = "";
@@ -170,31 +185,42 @@ function render(lista) {
 
         html += `
         <tr>
+
             <td>${item.codigo}</td>
+
             <td>
-${item.tipo === "CONTA"
-? '<span class="badge-conta">CONTA</span>'
-: '<span class="badge-protocolo">PROTOCOLO</span>'}
-<td>
-${item.etapa}
-</td>
+                ${
+                    item.tipo === "CONTA"
+                    ? '<span class="badge-conta">CONTA</span>'
+                    : '<span class="badge-protocolo">PROTOCOLO</span>'
+                }
+            </td>
 
-<td>
-${item.usuario}
-</td>
+            <td>
+                ${item.etapa || "-"}
+            </td>
 
-<td>
-${new Date(item.data_hora)
-.toLocaleString("pt-BR")}
-</td>
+            <td>
+                ${item.usuario}
+            </td>
+
+            <td>
+                ${new Date(item.data_hora)
+                .toLocaleString("pt-BR")}
+            </td>
 
         </tr>
         `;
-
     });
 
-    document.getElementById("tabela").innerHTML = html;
+    document
+        .getElementById("tabela")
+        .innerHTML = html;
 }
+
+/* ===========================
+   FILTRAR
+=========================== */
 
 function filtrar() {
 
@@ -207,31 +233,59 @@ function filtrar() {
     const filtrados =
         todosRegistros.filter(item =>
 
-            item.codigo.toLowerCase().includes(texto) ||
-            item.tipo.toLowerCase().includes(texto) ||
-            item.usuario.toLowerCase().includes(texto)
+            String(item.codigo)
+                .toLowerCase()
+                .includes(texto)
+
+            ||
+
+            String(item.tipo)
+                .toLowerCase()
+                .includes(texto)
+
+            ||
+
+            String(item.usuario)
+                .toLowerCase()
+                .includes(texto)
+
+            ||
+
+            String(item.etapa || "")
+                .toLowerCase()
+                .includes(texto)
 
         );
 
     render(filtrados);
 }
 
+/* ===========================
+   TROCAR USUARIO
+=========================== */
+
 function trocarUsuario() {
 
-    localStorage.removeItem("usuario");
+    localStorage.removeItem(
+        "usuario"
+    );
 
     location.reload();
 }
 
+/* ===========================
+   EXPORTAR CSV
+=========================== */
+
 function exportarCSV() {
 
     let csv =
-        "Codigo,Tipo,Usuario,DataHora\n";
+    "Codigo,Tipo,Etapa,Usuario,DataHora\n";
 
     todosRegistros.forEach(item => {
 
         csv +=
-            `${item.codigo},${item.tipo},${item.usuario},${item.data_hora}\n`;
+        `${item.codigo},${item.tipo},${item.etapa || ""},${item.usuario},${item.data_hora}\n`;
 
     });
 
@@ -239,7 +293,8 @@ function exportarCSV() {
         new Blob(
             [csv],
             {
-                type: "text/csv;charset=utf-8;"
+                type:
+                "text/csv;charset=utf-8;"
             }
         );
 
@@ -255,6 +310,10 @@ function exportarCSV() {
     link.click();
 }
 
+/* ===========================
+   ENTER
+=========================== */
+
 document
     .getElementById("codigo")
     .addEventListener(
@@ -267,6 +326,10 @@ document
             }
         }
     );
+
+/* ===========================
+   REALTIME
+=========================== */
 
 carregar();
 
