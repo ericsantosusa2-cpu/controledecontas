@@ -1,48 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+    font-family:'Inter',sans-serif;
 }
 
 body{
     min-height:100vh;
     background:
-    linear-gradient(
-        135deg,
-        #0f172a 0%,
-        #1e293b 50%,
-        #0f172a 100%
-    );
+    radial-gradient(circle at top right,#2563eb 0%,transparent 25%),
+    radial-gradient(circle at bottom left,#1d4ed8 0%,transparent 25%),
+    linear-gradient(135deg,#0f172a,#111827);
 
-    padding:30px;
     color:white;
+    padding:30px;
 }
-
-/* CABEÇALHO */
 
 header{
     background:rgba(255,255,255,.08);
-    backdrop-filter:blur(15px);
-
+    backdrop-filter:blur(20px);
     border:1px solid rgba(255,255,255,.1);
-
     border-radius:25px;
-
-    padding:25px;
-
+    padding:30px;
     text-align:center;
-
     margin-bottom:25px;
-
-    box-shadow:
-    0 10px 30px rgba(0,0,0,.35);
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
 
 header h1{
-    font-size:38px;
+    font-size:42px;
     margin-bottom:10px;
-    color:#ffffff;
+    font-weight:700;
 }
 
 #usuarioAtual{
@@ -51,60 +41,82 @@ header h1{
     font-weight:600;
 }
 
-/* CONTAINER */
-
 .container{
     background:rgba(255,255,255,.08);
-
     backdrop-filter:blur(20px);
-
     border-radius:25px;
-
     padding:25px;
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+/* DASHBOARD */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+
+    border-radius:18px;
+
+    padding:20px;
 
     border:1px solid rgba(255,255,255,.1);
 
-    box-shadow:
-    0 10px 30px rgba(0,0,0,.25);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+.card-title{
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.card-value{
+    margin-top:8px;
+    font-size:32px;
+    font-weight:bold;
+    color:#38bdf8;
 }
 
 /* INPUTS */
 
 input{
     width:100%;
-
-    padding:14px;
-
+    padding:15px;
     border:none;
-
-    border-radius:12px;
-
+    border-radius:14px;
     font-size:15px;
-
-    margin-bottom:12px;
-
-    outline:none;
-
+    margin-bottom:10px;
     background:white;
-
     color:#111827;
 }
 
 input:focus{
-    box-shadow:
-    0 0 0 3px
-    rgba(59,130,246,.4);
+    outline:none;
+    box-shadow:0 0 0 4px rgba(59,130,246,.4);
 }
 
 /* BOTÕES */
 
 .acoes{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
     margin-bottom:15px;
 }
 
 button{
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #2563eb,
         #1d4ed8
@@ -120,20 +132,17 @@ button{
 
     cursor:pointer;
 
-    margin-right:8px;
-
     transition:.3s;
 
-    font-weight:bold;
+    font-weight:600;
 }
 
 button:hover{
-
     transform:translateY(-2px);
 
     box-shadow:
-    0 6px 15px
-    rgba(37,99,235,.5);
+    0 10px 20px
+    rgba(37,99,235,.4);
 }
 
 /* TABELA */
@@ -141,115 +150,50 @@ button:hover{
 table{
     width:100%;
     border-collapse:collapse;
-
-    background:white;
-
-    color:#111827;
-
-    border-radius:15px;
-
     overflow:hidden;
-
-    margin-top:15px;
+    border-radius:15px;
+    background:white;
+    color:#111827;
 }
 
 th{
-    background:
-    linear-gradient(
-        135deg,
-        #2563eb,
-        #1d4ed8
-    );
-
+    background:#2563eb;
     color:white;
-
     padding:16px;
-
-    text-align:left;
-
     font-size:14px;
-
-    letter-spacing:.4px;
 }
 
 td{
     padding:14px;
-
     border-bottom:1px solid #e5e7eb;
-
-    font-size:14px;
 }
 
 tr:hover{
-    background:#f1f5f9;
+    background:#f8fafc;
 }
-
-/* SCROLL */
-
-::-webkit-scrollbar{
-    width:8px;
-}
-
-::-webkit-scrollbar-thumb{
-    background:#2563eb;
-    border-radius:10px;
-}
-
-/* STATUS */
 
 .badge-conta{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-    padding:5px 10px;
-
-    border-radius:8px;
-
-    font-size:12px;
-
+    padding:6px 12px;
+    border-radius:20px;
     font-weight:bold;
+    background:#dcfce7;
+    color:#15803d;
 }
 
 .badge-protocolo{
-
-    background:#dbeafe;
-
-    color:#1d4ed8;
-
-    padding:5px 10px;
-
-    border-radius:8px;
-
-    font-size:12px;
-
+    padding:6px 12px;
+    border-radius:20px;
     font-weight:bold;
+    background:#dbeafe;
+    color:#1d4ed8;
 }
-
-/* PESQUISA */
-
-#pesquisa{
-    margin-top:8px;
-}
-
-/* RODAPÉ */
 
 footer{
-
     position:fixed;
-
+    bottom:10px;
     right:20px;
-
-    bottom:12px;
-
     color:#94a3b8;
-
-    font-weight:bold;
-
-    font-size:13px;
-
-    letter-spacing:1px;
+    font-weight:600;
 }
 
 /* RESPONSIVO */
@@ -261,20 +205,18 @@ footer{
     }
 
     header h1{
-        font-size:28px;
+        font-size:30px;
+    }
+
+    .acoes{
+        flex-direction:column;
     }
 
     button{
         width:100%;
-        margin-bottom:8px;
     }
 
     table{
         font-size:12px;
-    }
-
-    th,
-    td{
-        padding:10px;
     }
 }
