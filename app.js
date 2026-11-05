@@ -104,10 +104,12 @@ async function carregar() {
             .select("*")
             .order(
                 "id",
-                { ascending: false }
+                {
+                    ascending:false
+                }
             );
 
-    if (error) {
+    if(error){
 
         console.error(error);
 
@@ -118,24 +120,24 @@ async function carregar() {
 
     render(todosRegistros);
 
-    const contas =
+    const pre =
         todosRegistros.filter(
-            x => x.tipo === "CONTA"
+            x => x.etapa === "PRE"
         ).length;
 
-    const protocolos =
+    const pos =
         todosRegistros.filter(
-            x => x.tipo === "PROTOCOLO"
+            x => x.etapa === "POS"
         ).length;
 
-    document.getElementById("contas").innerText =
-        contas;
+    document.getElementById("pre")
+    .innerText = pre;
 
-    document.getElementById("protocolos").innerText =
-        protocolos;
+    document.getElementById("pos")
+    .innerText = pos;
 
-    document.getElementById("total").innerText =
-        todosRegistros.length;
+    document.getElementById("total")
+    .innerText = todosRegistros.length;
 }
 function render(lista) {
 
